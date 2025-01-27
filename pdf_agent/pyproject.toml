@@ -1,0 +1,23 @@
+[project]
+name = "pdf_agent"
+version = "0.1.0"
+description = "pdf-agent using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.98.0,<1.0.0"
+]
+
+[project.scripts]
+pdf_agent = "pdf_agent.main:run"
+run_crew = "pdf_agent.main:run"
+train = "pdf_agent.main:train"
+replay = "pdf_agent.main:replay"
+test = "pdf_agent.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
