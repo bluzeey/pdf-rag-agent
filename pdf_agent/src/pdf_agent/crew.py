@@ -52,13 +52,14 @@ class PdfAgent():
 
     @agent
     def chat_agent(self) -> Agent:
-        """Agent to handle conversational interactions based on PDF content."""
+        """Agent to handle conversational interactions based on PDF content. 
+        TODO: Add human conversational layer"""
         llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0.2)
         return Agent(
             role='Chat Assistant',
             goal='Answer user queries based on PDF content and provide insights.',
             backstory="An AI-powered assistant trained on PDF data, helping users find information efficiently.",
-            tools=[human_chat], 
+            tools=tools, 
             llm=llm,
             verbose=True
         )
