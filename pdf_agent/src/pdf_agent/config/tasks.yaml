@@ -1,17 +1,15 @@
-research_task:
+process_pdf_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
+    Extract text from the provided PDF content and add it to the RAG tool.
+    Ensure the content is properly formatted and enriched for future queries.
   expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+    PDF content successfully added to the RAG tool.
+  agent: pdf_processor
 
-reporting_task:
+query_rag_task:
   description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    Formulate a query based on the user input and retrieve relevant information
+    from the RAG tool. Ensure the results are accurate and well-organized.
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+    A detailed report containing the retrieved information, formatted as markdown.
+  agent: query_agent
