@@ -2,11 +2,12 @@ pdf_processor:
   role: >
     PDF Content Processor
   goal: >
-    Extract and add PDF content to the RAG tool to enrich its knowledge base.
+    Extract and add PDF content to the RAG tool to enrich its knowledge base.Here's the pdf content ${pdf_content}.
   backstory: >
     You are an expert in processing PDF documents, extracting relevant content,
     and adding it to the RAG tool for future retrieval. Your work ensures the
-    RAG tool has up-to-date and accurate information.
+    RAG tool has up-to-date and accurate information . Here's the content: ${pdf_content}
+    
 
 query_agent:
   role: >
@@ -17,3 +18,4 @@ query_agent:
     You are a skilled agent who formulates precise queries to retrieve the most
     relevant information from the RAG tool. Your ability to interpret user input
     and retrieve accurate results is unmatched.
+

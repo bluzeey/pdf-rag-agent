@@ -17,21 +17,33 @@ tools = composio_toolset.get_tools(apps=[App.RAGTOOL])
 def extract_text_from_pdf_url(pdf_url):
     """
     Download and extract text from a PDF file given its URL.
+    Uses a User-Agent header to prevent request rejection.
     """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                      "(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Accept": "application/pdf"
+    }
+
     try:
-        # Download the PDF file
-        response = requests.get(pdf_url)
-        response.raise_for_status()  # Raise an error for bad status codes
+        # Download the PDF file with headers
+        response = requests.get(pdf_url, headers=headers)
+        response.raise_for_status()  # Raise an error for HTTP issues
 
         # Read the PDF content
         pdf_file = BytesIO(response.content)
         reader = PdfReader(pdf_file)
-        text = ""
-        for page in reader.pages:
-            text += page.extract_text()
+        text = "\n".join(page.extract_text() for page in reader.pages if page.extract_text())
+        
+        if not text.strip():
+            raise ValueError("No extractable text found in the PDF. It may be an image-based PDF.")
+
         return text
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"Network error while fetching PDF: {e}")
     except Exception as e:
         raise Exception(f"Failed to extract text from PDF: {e}")
+    
 
 def run():
     """
@@ -46,8 +58,6 @@ def run():
 
         # Prepare inputs for the crew
         inputs = {
-            'topic': 'AI LLMs',
-            'current_year': str(datetime.now().year),
             'pdf_content': pdf_content  # Pass the extracted PDF content
         }
 
@@ -60,9 +70,10 @@ def train():
     """
     Train the crew for a given number of iterations.
     """
+    pdf_content = extract_text_from_pdf_url(pdf_url)
     inputs = {
-        "topic": "AI LLMs"
-    }
+            'pdf_content': pdf_content  # Pass the extracted PDF content
+        }
     try:
         PdfAgent().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
     except Exception as e:
@@ -81,9 +92,6 @@ def test():
     """
     Test the crew execution and returns the results.
     """
-    inputs = {
-        "topic": "AI LLMs"
-    }
     try:
         PdfAgent().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
     except Exception as e:
